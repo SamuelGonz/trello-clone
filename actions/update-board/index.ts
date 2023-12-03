@@ -52,8 +52,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       };
    }
 
-   revalidatePath(`/board/${id}`);
-   return { data: board };
+   revalidatePath(`/board/${boardId}`);
+   return { data: list };
 };
 
 export const createList = createSafeAction(CreateList, handler);

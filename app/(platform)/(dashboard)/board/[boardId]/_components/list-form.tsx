@@ -1,9 +1,13 @@
 "use client";
 
 import { useRef, useState, ElementRef } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEventListener, useOnClickOutside } from "usehooks-ts";
 
+import { useAction } from "@/hooks/use-action";
+import { createList } from "@/actions/update-board";
+
+import { toast } from "sonner";
 import { FormInput } from "@/components/form/form-input";
 import { FormSubmit } from "@/components/form/form-submit";
 import { ListWrapper } from "./list-wrapper";
@@ -12,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
 
 export const ListForm = () => {
+   const router = useRouter();
    const params = useParams();
 
    const formRef = useRef<ElementRef<"form">>(null);
@@ -30,6 +35,17 @@ export const ListForm = () => {
       setIsEditing(false);
    };
 
+   const { execute, fieldErrors } = useAction(createList, {
+      onSuscess: (data) => {
+         toast.success(`List ${data.title} created`);
+         disableEditing();
+         router.refresh();
+      },
+      onError: (error) => {
+         toast.error(error);
+      },
+   });
+
    const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
          disableEditing();
@@ -39,11 +55,23 @@ export const ListForm = () => {
    useEventListener("keydown", onKeyDown);
    useOnClickOutside(formRef, disableEditing);
 
+   const onSubmit = (formData: FormData) => {
+      const title = formData.get("title") as string;
+      const boardId = formData.get("boardId") as string;
+
+      execute({ title, boardId });
+   };
+
    if (isEditing) {
       return (
          <ListWrapper>
-            <form ref={formRef} className="w-full rounded-md p-3 bg-white space-y-4 shadow-md">
+            <form
+               action={onSubmit}
+               ref={formRef}
+               className="w-full rounded-md p-3 bg-white space-y-4 shadow-md"
+            >
                <FormInput
+                  errors={fieldErrors}
                   ref={inputRef}
                   id="title"
                   className="text-sm px-2 py-1 h-7 font-medium border-transparent hover:border-input focus:border-input transition"
