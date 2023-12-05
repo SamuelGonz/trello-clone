@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEventListener, useOnClickOutside } from "usehooks-ts";
 
 import { useAction } from "@/hooks/use-action";
-import { createList } from "@/actions/update-board";
+import { createList } from "@/actions/create-list";
 
 import { toast } from "sonner";
 import { FormInput } from "@/components/form/form-input";

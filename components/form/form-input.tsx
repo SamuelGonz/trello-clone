@@ -16,13 +16,24 @@ interface Props {
    disabled?: boolean;
    errors?: Record<string, string[] | undefined>;
    className?: string;
-   defauultValue?: string;
+   defaultValue?: string;
    onBlur?: () => void;
 }
 
 export const FormInput = forwardRef<HTMLInputElement, Props>(
    (
-      { id, label, type, placeholder, required, disabled, errors, className, defauultValue = "", onBlur },
+      {
+         id,
+         label,
+         type,
+         placeholder,
+         required,
+         disabled,
+         errors,
+         className,
+         defaultValue = "",
+         onBlur,
+      },
       ref
    ) => {
       const { pending } = useFormStatus();
@@ -37,7 +48,7 @@ export const FormInput = forwardRef<HTMLInputElement, Props>(
                ) : null}
                <Input
                   onBlur={onBlur}
-                  defaultValue={defauultValue}
+                  defaultValue={defaultValue}
                   ref={ref}
                   required={required}
                   name={id}
