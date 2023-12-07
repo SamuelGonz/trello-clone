@@ -20,10 +20,10 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
    const { id, boardId } = data;
 
-   let List;
+   let list;
 
    try {
-      List = await db.list.delete({
+      list = await db.list.delete({
          where: { id, boardId, board: { orgId } },
       });
    } catch {
@@ -33,7 +33,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
    }
 
    revalidatePath(`/organization/${orgId}`);
-   return { data: List };
+   return { data: list };
 };
 
 export const deleteList = createSafeAction(DeleteList, handler);

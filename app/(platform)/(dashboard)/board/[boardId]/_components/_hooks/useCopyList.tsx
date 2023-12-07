@@ -1,11 +1,11 @@
-import { deleteList } from "@/actions/delete-list";
 import { useAction } from "@/hooks/use-action";
 import { toast } from "sonner";
+import { copyList } from "@/actions/copy-list";
 
-export const useDeleteList = (closeRef: React.RefObject<HTMLSelectElement>) => {
-   const { execute: executeDelete } = useAction(deleteList, {
+export const useCopyList = (closeRef: React.RefObject<HTMLSelectElement>) => {
+   const { execute: executeCopy } = useAction(copyList, {
       onSuscess: (data) => {
-         toast.success(`List ${data.title} deleted!`);
+         toast.success(`List ${data.title} copied!`);
          closeRef.current?.click();
       },
       onError: (error) => {
@@ -13,14 +13,14 @@ export const useDeleteList = (closeRef: React.RefObject<HTMLSelectElement>) => {
       },
    });
 
-   const onDelete = (formData: FormData) => {
+   const onCopy = (formData: FormData) => {
       const id = formData.get("id") as string;
       const boardId = formData.get("boardId") as string;
 
-      executeDelete({ id, boardId });
+      executeCopy({ id, boardId });
    };
 
    return {
-      onDelete,
+      onCopy,
    };
 };
